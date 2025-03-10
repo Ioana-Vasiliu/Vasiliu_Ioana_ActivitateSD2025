@@ -79,13 +79,28 @@ void copiazaMasiniUsoare(struct Masina* vector, char nrElemente, float prag, str
 
 }
 
-struct Masina getPrimulElementConditionat(struct Masina* vector, int nrElemente, const char* conditie) {
-	//trebuie cautat elementul care indeplineste o conditie
-	//dupa atributul de tip char*. Acesta este returnat.
-	struct Masina s;
-	s.id = 1;
+//trebuie cautat elementul care indeplineste o conditie
+//dupa atributul de tip char*, acesta trebuie returnat
 
-	return s;
+struct Masina getPrimaMasina(struct Masina* vector, int nrElemente, const char* conditie) {
+	for (int i = 0; i < nrElemente; i++) {
+		if (strcmp(vector[i].model, conditie) == 0) {
+			return vector[i];
+
+		}
+
+
+	}
+	struct Masina masinaInvalida;
+	masinaInvalida.id = -1;
+	masinaInvalida.model = malloc(sizeof(char));
+	masinaInvalida.model[0] = ' ';
+	masinaInvalida.tonaj = 0.0;
+	masinaInvalida.serie = ' ';
+
+	return masinaInvalida;
+	
+
 }
 
 int main() {
@@ -94,7 +109,7 @@ int main() {
 	m = initializare(1, "BMW", 2.3, '1');
 	afisare(m);
 
-	int nrMasini = 3;
+	int nrMasini = 4;
 
 	struct Masina* vectorMasini;
 	vectorMasini = malloc(sizeof(struct Masina) * nrMasini);
@@ -102,6 +117,7 @@ int main() {
 	vectorMasini[0] = initializare(2, "Mercedes", 2.2, 'C');
 	vectorMasini[1] = initializare(3, "Audi", 2.6, 'S');
 	vectorMasini[2] = initializare(4, "BMW", 1.8, '5');
+	vectorMasini[3] = initializare(5, "BMW", 2.2, '3');
 
 	afisareVector(vectorMasini, nrMasini);
 
@@ -121,6 +137,12 @@ int main() {
 	afisareVector(vectorMasiniCopiate, nrElementeCopiate);
 
 	dezalocare(&vectorMasiniCopiate, &nrElementeCopiate);
+
+	printf("\n Prima masina gasita:  \n");
+	struct Masina masinaGasita = getPrimaMasina(vectorMasini, nrMasini, "BMW");
+	afisare(masinaGasita);
+
+
 
 	return 0;
 }
