@@ -85,6 +85,14 @@ void modificaCostul(struct VizitaMedicala* v) {
 	}
 }
 
+//functie ce modifica diagnosticul pentru o anumita vizita, diagnosticul nou este primit ca parametru
+void modificaDiagnostic(struct VizitaMedicala* v, const char* nouDiagnostic) {
+	free(v->diagnostic); 
+	v->diagnostic = malloc(strlen(nouDiagnostic) + 1);
+	strcpy_s(v->diagnostic, strlen(nouDiagnostic) + 1, nouDiagnostic);
+		
+}
+
 
 
 
@@ -97,19 +105,22 @@ int main() {
 
 
 
-	struct VizitaMedicala vizita1 = initializareVizita(1, "Ion", 200.0, 45, "Diabet zaharat");
+	struct VizitaMedicala vizita1 = initializareVizita(1, "Ion", 200.75, 45, "Diabet zaharat");
 	struct VizitaMedicala vizita2 = initializareVizita(2, "Maria", 150.5, 38, "Raceala");
 	struct VizitaMedicala vizita3 = initializareVizita(3, "Alex", 175.75, 50, "Diabet zaharat");
 
-
+	printf("\nAfisare vizita 1 dupa de modificare cost: ");
 	modificaCostul(&vizita1);
 	afisareVizita(vizita1);
 
+	printf("\nAfisare vizita 2 dupa de modificare diagnostic: ");
+	modificaDiagnostic(&vizita2, "Gripa A");
+	afisareVizita(vizita2);
 
 
 
-	//free(vizita.numePacient);
-	//free(vizita.diagnostic);
+
+
 	return 0;
 }
 
