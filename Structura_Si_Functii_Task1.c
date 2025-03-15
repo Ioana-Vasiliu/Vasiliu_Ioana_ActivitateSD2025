@@ -56,24 +56,60 @@ void afisareVizita(VizitaMedicala vizita) {
 	printf("Cost: %.2f\n", vizita.cost);
 	printf("Varsta: %d\n", vizita.varsta);
 	printf("Diagnostic: %s\n", vizita.diagnostic);
+
 }
+
+//initializare
+struct VizitaMedicala initializareVizita(int id, const char* numePacient, float cost, int varsta, const char* diagnostic) {
+	struct VizitaMedicala v;
+
+	v.id = id;
+	v.numePacient = (char*)malloc(strlen(numePacient) + 1);
+	strcpy_s(v.numePacient, strlen(numePacient) + 1, numePacient);
+
+	v.cost = cost;
+	v.varsta = varsta;
+	v.diagnostic = (char*)malloc(strlen(diagnostic) + 1);
+	strcpy_s(v.diagnostic, strlen(diagnostic) + 1, diagnostic);
+
+	return v;
+
+
+}
+
+
+//reduce costul consultatiei cu 20%  daca diagnosticul este Diabet Zaharat
+void modificaCostul(struct VizitaMedicala* v) {
+	if (strcmp(v->diagnostic, "Diabet zaharat") == 0) {
+		v->cost *= 0.8;
+	}
+}
+
 
 
 
 int main() {
 
 	//apel citire tastatura
-	VizitaMedicala vizita = citesteVizita();
+	//VizitaMedicala vizita = citesteVizita();
 
-	afisareVizita(vizita);
-
-
-
-	free(vizita.numePacient);
-	free(vizita.diagnostic);
+	//afisareVizita(vizita);
 
 
 
+	struct VizitaMedicala vizita1 = initializareVizita(1, "Ion", 200.0, 45, "Diabet zaharat");
+	struct VizitaMedicala vizita2 = initializareVizita(2, "Maria", 150.5, 38, "Raceala");
+	struct VizitaMedicala vizita3 = initializareVizita(3, "Alex", 175.75, 50, "Diabet zaharat");
+
+
+	modificaCostul(&vizita1);
+	afisareVizita(vizita1);
+
+
+
+
+	//free(vizita.numePacient);
+	//free(vizita.diagnostic);
 	return 0;
 }
 
