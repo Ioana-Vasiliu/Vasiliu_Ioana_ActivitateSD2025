@@ -11,8 +11,6 @@ typedef struct VizitaMedicala {
 	int varsta;
 	char* diagnostic;
 
-
-
 }VizitaMedicala;
 
 
@@ -94,6 +92,17 @@ void modificaDiagnostic(struct VizitaMedicala* v, const char* nouDiagnostic) {
 }
 
 
+void dezalocareVizita(struct VizitaMedicala* v) {
+	if (v->numePacient != NULL) {
+		free(v->numePacient);
+		v->numePacient = NULL;
+	}
+	if (v->diagnostic != NULL) {  
+		free(v->diagnostic);
+		v->diagnostic = NULL;
+	}
+}
+
 
 
 int main() {
@@ -102,8 +111,6 @@ int main() {
 	//VizitaMedicala vizita = citesteVizita();
 
 	//afisareVizita(vizita);
-
-
 
 	struct VizitaMedicala vizita1 = initializareVizita(1, "Ion", 200.75, 45, "Diabet zaharat");
 	struct VizitaMedicala vizita2 = initializareVizita(2, "Maria", 150.5, 38, "Raceala");
@@ -117,9 +124,9 @@ int main() {
 	modificaDiagnostic(&vizita2, "Gripa A");
 	afisareVizita(vizita2);
 
-
-
-
+	dezalocareVizita(&vizita1);
+	dezalocareVizita(&vizita2);
+	dezalocareVizita(&vizita3);
 
 	return 0;
 }
