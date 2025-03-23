@@ -124,6 +124,31 @@ void mutaVizitePneumonie(struct VizitaMedicala* vector, int* nrElemente, struct 
 	*nrElemente = j;
 }
 
+void concateneazaVectori(struct VizitaMedicala* vect1, int nrElemente1, struct VizitaMedicala* vect2, int nrElemente2, struct VizitaMedicala** vectorFinal, int* nrElementeRezultat) {
+	(*nrElementeRezultat) = nrElemente1 + nrElemente2;
+
+	(*vectorFinal) = malloc(sizeof(struct VizitaMedicala) * (*nrElementeRezultat));
+
+	//copiem elem din primul vector
+	for (int i = 0; i < nrElemente1; i++) {
+		
+		(*vectorFinal)[i] = vect1[i];
+		(*vectorFinal)[i].numePacient = malloc(sizeof(char) * (strlen(vect1[i].numePacient) + 1));
+		strcpy_s((*vectorFinal)[i].numePacient, strlen(vect1[i].numePacient) + 1, vect1[i].numePacient);
+		(*vectorFinal)[i].diagnostic = malloc(sizeof(char) * (strlen(vect1[i].diagnostic) + 1));
+		strcpy_s((*vectorFinal)[i].diagnostic, strlen(vect1[i].diagnostic) + 1, vect1[i].diagnostic);
+		}
+
+	//copiem elem din al doilea vector
+	for (int i = 0; i < nrElemente2; i++) {
+        (*vectorFinal)[nrElemente1 + i] = vect2[i]; // Poziția corectă în vectorul final
+        (*vectorFinal)[nrElemente1 + i].numePacient = malloc(sizeof(char) * (strlen(vect2[i].numePacient) + 1));
+        strcpy_s((*vectorFinal)[nrElemente1 + i].numePacient, strlen(vect2[i].numePacient) + 1, vect2[i].numePacient);
+        (*vectorFinal)[nrElemente1 + i].diagnostic = malloc(sizeof(char) * (strlen(vect2[i].diagnostic) + 1));
+        strcpy_s((*vectorFinal)[nrElemente1 + i].diagnostic, strlen(vect2[i].diagnostic) + 1, vect2[i].diagnostic);
+    }
+}
+
 
 
 int main() {
@@ -156,10 +181,9 @@ int main() {
 	copiazaViziteFiltrate(vectorVizite, nrVizite, 30, &vectorViziteCopiat, &nrElementeCopiate);
 	afisareVector(vectorViziteCopiat, nrElementeCopiate);
 
-	dezalocareVector(&vectorViziteCopiat, &nrElementeCopiate);
 
 
-	//apel vectro mutat pe baza conditiei diagnostic = pneumonie
+	//apel vector mutat pe baza conditiei diagnostic = pneumonie
 	struct VizitaMedicala* vectorViziteMutate;
 	vectorViziteMutate = NULL;
 	int nrElementeMutate = 0;
@@ -174,8 +198,30 @@ int main() {
 	printf("\nVectorul original dupa mutare (trebuie sa nu mai contina vizite cu 'Pneumonie'):\n");
 	afisareVector(vectorVizite, nrVizite);
 
-	dezalocareVector(&vectorVizite, &nrVizite);
-	dezalocareVector(&vectorViziteMutate, &nrElementeMutate);
 
+
+	// apel concatenare vectori
+
+	int nrViziteAditionale2 = 2;
+	struct VizitaMedicala* vectorViziteAditionale2;
+	vectorViziteAditionale2 = malloc(sizeof(struct VizitaMedicala) * nrViziteAditionale2);
+	vectorViziteAditionale2[0] = initializareVizita(20, "Cristina Vasilescu", 510.00, 50, "Pneumonie");
+	vectorViziteAditionale2[1] = initializareVizita(21, "Radu Munteanu", 280.00, 65, "Hipertensiune");
+
+	struct VizitaMedicala* vectorConcatenat;
+	int nrElementeConcatenate = 0;
+
+	concateneazaVectori(vectorVizite, nrVizite, vectorViziteAditionale2, nrViziteAditionale2, &vectorConcatenat, &nrElementeConcatenate);
+
+	printf("\nVectorul concatenat:\n");
+	afisareVector(vectorConcatenat, nrElementeConcatenate);
+
+	// Eliberare memorie
+	dezalocareVector(&vectorViziteCopiat, &nrElementeCopiate);
+	dezalocareVector(&vectorViziteMutate, &nrElementeMutate);
+	dezalocareVector(&vectorViziteAditionale2, &nrViziteAditionale2);
+	dezalocareVector(&vectorConcatenat, &nrElementeConcatenate);
+
+	
 	return 0;
 }
