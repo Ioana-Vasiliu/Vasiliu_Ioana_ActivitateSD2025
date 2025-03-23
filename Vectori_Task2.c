@@ -217,6 +217,7 @@ int main() {
 	afisareVector(vectorConcatenat, nrElementeConcatenate);
 
 	// Eliberare memorie
+	dezalocareVector(&vectorVizite, &nrVizite);
 	dezalocareVector(&vectorViziteCopiat, &nrElementeCopiate);
 	dezalocareVector(&vectorViziteMutate, &nrElementeMutate);
 	dezalocareVector(&vectorViziteAditionale2, &nrViziteAditionale2);
