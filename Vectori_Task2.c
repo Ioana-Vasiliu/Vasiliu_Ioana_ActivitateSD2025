@@ -50,6 +50,18 @@ void afisareVector(struct VizitaMedicala* vector, int nrElemente) {
 	}
 }
 
+//functia dezalocare
+void dezalocareVector(struct VizitaMedicala** vector, int* nrElemente) {
+	//dezalocam elementele din vector si vectorul
+	for (int i = 0;i < *nrElemente;i++) {
+		free((*vector)[i].numePacient);
+		free((*vector)[i].diagnostic);
+	}
+	free(*vector);
+	*vector = NULL;
+	*nrElemente = 0;
+}
+
 // Functie care creeaza un nou vector care contine doar elementele care indeplinesc conditia : varsta > 30 
 
 void copiazaViziteFiltrate(struct VizitaMedicala* vector, int nrElemente, int varstaPrag, struct VizitaMedicala** vectorNou, int* dimensiune) {
@@ -80,16 +92,30 @@ void copiazaViziteFiltrate(struct VizitaMedicala* vector, int nrElemente, int va
 	}
 }
 
-//functia dezalocare
-void dezalocareVector(struct VizitaMedicala** vector, int* nrElemente) {
-	//dezalocam elementele din vector si vectorul
-	for (int i = 0;i < *nrElemente;i++) {
-		free((*vector)[i].numePacient);
-		free((*vector)[i].diagnostic);
+void mutaVizitePneumonie(struct VizitaMedicala* vector, int nrElemente, struct VizitaMedicala** vectorNou, int* dimensiune) {
+	(*dimensiune) = 0;
+
+	for (int i = 0; i < nrElemente; i++) {
+		if (strcmp(vector[i].diagnostic, "Pneumonie") == 0) {
+			(*dimensiune)++;
+		}
 	}
-	free(*vector);
-	*vector = NULL;
-	*nrElemente = 0;
+	(*vectorNou) = malloc(sizeof(struct VizitaMedicala) * (*dimensiune));
+
+	int k = 0;
+
+	for (int i = 0; i < nrElemente; i++) {
+		if (strcmp(vector[i].diagnostic, "Pneumonie") == 0) {
+			(*vectorNou)[k] = vector[i];
+			(*vectorNou)[k].numePacient = malloc(strlen(vector[i].numePacient) + 1);
+			strcpy_s((*vectorNou)[k].numePacient, strlen(vector[i].numePacient) + 1, vector[i].numePacient);
+
+			(*vectorNou)[k].diagnostic = malloc(strlen(vector[i].diagnostic) + 1);
+			strcpy_s((*vectorNou)[k].diagnostic, strlen(vector[i].diagnostic) + 1, vector[i].diagnostic);
+
+			k++;
+		}
+	}
 }
 
 
@@ -120,14 +146,24 @@ int main() {
 	int nrElementeCopiate = 0;
 
 
-	printf("\n Vector Vizite Filtrate dupa varsta \n");
+	printf("\n Vector Vizite Filtrate dupa varsta : \n");
 	copiazaViziteFiltrate(vectorVizite, nrVizite, 30, &vectorViziteCopiat, &nrElementeCopiate);
-	afisareVector(vectorViziteCopiat, nrElementeCopiate);
+	//afisareVector(vectorViziteCopiat, nrElementeCopiate);
 
 	dezalocareVector(&vectorViziteCopiat, &nrElementeCopiate);
 
-	
-	// Mutare vizite cu diagnostic Pneumonie
+
+
+	struct VizitaMedicala* vectorViziteMutate;
+	vectorViziteMutate = 0;
+	int nrElementeMutate = 0;
+
+	//mutare vector nou si afisare vector nou
+	mutaVizitePneumonie(vectorVizite, nrVizite, &vectorViziteMutate, &nrElementeMutate);
+	printf("\n Vector vizite cu diagnostic 'Pneumonie':\n");
+	afisareVector(vectorViziteMutate, nrElementeMutate);
+	dezalocareVector(&vectorViziteMutate, &nrElementeMutate);
+
 	// Concatenare vizite
 	// Eliberare memorie
 
