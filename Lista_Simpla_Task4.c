@@ -95,13 +95,34 @@ void adaugaLaInceputInLista(Nod** lista, Masina masinaNoua) {
 
 }
 
-Nod* citireListaMasiniDinFisier(const char* numeFisier) {
+//am sortat lista dupa pret
+void adaugaMasinaInListaSortataPret(Nod** lista, Masina masinaNoua) {
+	Nod* nou = (Nod*)malloc(sizeof(Nod));
+	nou->info = masinaNoua;
+
+	if (*lista == NULL || (*lista)->info.pret >= masinaNoua.pret) {
+		nou->next = *lista;
+		*lista = nou;
+	}
+	else {
+		Nod* curent = *lista;
+		while (curent->next != NULL && curent->next->info.pret < masinaNoua.pret) {
+			curent = curent->next;
+		}
+		nou->next = curent->next;
+		curent->next = nou;
+	}
+}
+
+
+//am modif si aici pt a lucra cu ea sortata
+Nod* citireListaMasiniDinFisierSortata(const char* numeFisier) {
 	FILE* file = fopen(numeFisier, "r");
 	Nod* lista = NULL;
 
 
 	while (!feof(file)) {
-		adaugaLaInceputInLista(&lista, citireMasinaDinFisier(file));
+		adaugaMasinaInListaSortataPret(&lista, citireMasinaDinFisier(file));
 
 	}
 	fclose(file);
@@ -212,7 +233,7 @@ void stergeNodPePozitie(Nod** lista, int pozitie) {
 }
 
 int main() {
-	Nod* masini = citireListaMasiniDinFisier("masini.txt");
+	Nod* masini = citireListaMasiniDinFisierSortata("masini.txt");
 	afisareListaMasini(masini);
 
 
@@ -231,6 +252,12 @@ int main() {
 	int pozitie = 3;  
 	printf("\n-----STERGERE POZITIA 3, IN CAZUL NOSTRU ID = 6---\n");
 	stergeNodPePozitie(&masini, pozitie);
+	afisareListaMasini(masini);
+
+	// adaugare element nou dupa ce am sortat lista 
+	printf("\n-----ADAUGARE IN LISTA DUPA CE AM SORTAT-O DUPA PRET\n");
+	Masina masinaNoua = { 10, 4, 7000, "Dacia", "Popescu", 'C' };
+	adaugaMasinaInListaSortataPret(&masini, masinaNoua);
 	afisareListaMasini(masini);
 
 	dezalocareListaMasini(&masini);
