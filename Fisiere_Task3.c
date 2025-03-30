@@ -81,14 +81,23 @@ VizitaMedicala* citireVectorViziteFisier(const char* numeFisier, int* nrViziteCi
 	while (!feof(f)) {
 		VizitaMedicala v = citireViziteFisier(f);
 		adaugaViziteInVector(&vizite, nrViziteCitite, v);
-			free(v.numePacient);
-			free(v.diagnostic);
-		
+		free(v.numePacient);
+		free(v.diagnostic);
+
 	}
 
 	fclose(f);
 	return vizite;
 }
+
+
+//functie ce salveaza un obiect in fisier
+void salveazaVizitaInFisier(VizitaMedicala vizita, const char* numeFisier) {
+	FILE* f = fopen(numeFisier, "a");
+	fprintf(f, "\n%d,%s,%.2f,%d,%s\n", vizita.id, vizita.numePacient, vizita.cost, vizita.varsta, vizita.diagnostic);
+	fclose(f);
+}
+
 
 void dezalocareVectorVizite(VizitaMedicala** vector, int* nrVizite) {
 	for (int i = 0; i < *nrVizite; i++) {
@@ -96,7 +105,7 @@ void dezalocareVectorVizite(VizitaMedicala** vector, int* nrVizite) {
 		free((*vector)[i].diagnostic);
 	}
 	free(*vector);
-	*vector = NULL; 
+	*vector = NULL;
 	*nrVizite = 0;
 }
 
@@ -107,8 +116,13 @@ int main() {
 	int nrVizite = 0;
 	vizite = citireVectorViziteFisier("vizite.txt", &nrVizite);
 	afisareVectorVizite(vizite, nrVizite);
+
+	//adaugare obiect in fisier
+	VizitaMedicala vizitaNoua = { 20, "Marian", 300.0, 40, "Hemoragie" };
+	salveazaVizitaInFisier(vizitaNoua, "vizite.txt");
+
 	dezalocareVectorVizite(&vizite, &nrVizite);
-	
+
 
 	return 0;
 }

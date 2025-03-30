@@ -8,3 +8,4 @@
 17,Radulescu,275.9,32,Infectie
 18,Serban,500.3,55,Diabet
 19,Mocanu,220.0,28,Anemie
+20,Marian,300.00,40,Hemoragie
