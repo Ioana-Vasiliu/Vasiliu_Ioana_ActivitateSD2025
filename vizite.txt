@@ -1,0 +1,10 @@
+10,Popescu,200.5,45,Raceala
+11,Ionescu,350.0,34,Gripa
+12,Georgescu,150.75,29,Fractura
+13,Stanescu,400.2,50,Pneumonie
+14,Dumitru,250.0,40,Bronsita
+15,Marinescu,180.6,25,Alergie
+16,Petrescu,300.0,37,Fractura
+17,Radulescu,275.9,32,Infectie
+18,Serban,500.3,55,Diabet
+19,Mocanu,220.0,28,Anemie
