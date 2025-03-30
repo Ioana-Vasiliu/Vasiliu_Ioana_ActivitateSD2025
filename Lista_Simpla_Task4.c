@@ -47,6 +47,7 @@ Masina citireMasinaDinFisier(FILE* file) {
 	return m1;
 }
 
+
 void afisareMasina(Masina masina) {
 	printf("Id: %d\n", masina.id);
 	printf("Nr. usi : %d\n", masina.nrUsi);
@@ -60,6 +61,12 @@ void afisareListaMasini(Nod* lista) {
 	while (lista) {
 		afisareMasina(lista->info);
 		lista = lista->next;
+	}
+}
+// Functie pentru afisarea vectorului de masini
+void afisareVector(Masina* vector, int nrElemente) {
+	for (int i = 0; i < nrElemente; i++) {
+		afisareMasina(vector[i]);
 	}
 }
 
@@ -232,6 +239,47 @@ void stergeNodPePozitie(Nod** lista, int pozitie) {
 	free(temp);
 }
 
+// Functie care creeaza un nou vector care contine doar elementele care indeplinesc conditia : numele soferului sa fie "Ionesu"
+void copiazaMasiniFiltrate(Nod* lista, const char* numeFiltrat, Masina** vectorNou, int* dimensiune) {
+	(*dimensiune) = 0;
+	Nod* temp = lista;
+	while (temp) {
+		if (strcmp(temp->info.numeSofer, numeFiltrat) == 0) {
+			(*dimensiune)++;
+		}
+		temp = temp->next;
+	}
+
+	(*vectorNou) = (Masina*)malloc(sizeof(Masina) * (*dimensiune));
+	int k = 0;
+	temp = lista;
+
+	while (temp) {
+		if (strcmp(temp->info.numeSofer, numeFiltrat) == 0) {
+			(*vectorNou)[k].id = temp->info.id;
+			(*vectorNou)[k].nrUsi = temp->info.nrUsi;
+			(*vectorNou)[k].pret = temp->info.pret;
+			(*vectorNou)[k].serie = temp->info.serie;
+
+			(*vectorNou)[k].model = (char*)malloc(strlen(temp->info.model) + 1);
+			strcpy_s((*vectorNou)[k].model, strlen(temp->info.model) + 1, temp->info.model);
+			(*vectorNou)[k].numeSofer = (char*)malloc(strlen(temp->info.numeSofer) + 1);
+			strcpy_s((*vectorNou)[k].numeSofer, strlen(temp->info.numeSofer) + 1, temp->info.numeSofer);
+			k++;
+		}
+		temp = temp->next; 
+	}
+}
+
+void dezalocaVectorMasini(Masina* vector, int dimensiune) {
+	for (int i = 0; i < dimensiune; i++) {
+		free(vector[i].model);
+		free(vector[i].numeSofer);
+	}
+	free(vector);
+}
+
+
 int main() {
 	Nod* masini = citireListaMasiniDinFisierSortata("masini.txt");
 	afisareListaMasini(masini);
@@ -260,7 +308,16 @@ int main() {
 	adaugaMasinaInListaSortataPret(&masini, masinaNoua);
 	afisareListaMasini(masini);
 
+
+	//apel pentru adaugarea elementelor filtrate in vector
+	printf("\n-----VECTOR FILTRAT DUPA NUME\n");
+	Masina* vectorFiltrat = NULL;
+	int dimensiune = 0;
+	copiazaMasiniFiltrate(masini, "Ionescu", &vectorFiltrat, &dimensiune);
+	afisareVector(vectorFiltrat, dimensiune);
+
 	dezalocareListaMasini(&masini);
+	dezalocaVectorMasini(vectorFiltrat, dimensiune);
 
 
 	return 0;
