@@ -5,7 +5,7 @@
 
 
 
-struct StructuraMasina {
+struct Masina {
 	int id;
 	int nrUsi;
 	float pret;
@@ -13,15 +13,30 @@ struct StructuraMasina {
 	char* numeSofer;
 	unsigned char serie;
 };
-typedef struct StructuraMasina Masina;
-
-//creare structura pentru un nod dintr-o lista simplu inlantuita
+typedef struct Masina Masina;
 
 typedef struct Nod Nod;
  struct Nod {
 	Masina info;
 	Nod* next;
 };
+
+ Masina initializare(int idNou, int nrUsiNou, float pretNou, const char* modelNou, const char* numeSoferNou, unsigned char serieNou) {
+	 Masina m;
+	 m.id = idNou;
+	 m.nrUsi = nrUsiNou;
+	 m.pret = pretNou;
+
+	 m.model = (char*)malloc(strlen(modelNou) + 1);
+	 strcpy_s(m.model, strlen(modelNou) + 1, modelNou);
+
+	 m.numeSofer = (char*)malloc(strlen(numeSoferNou) + 1);
+	 strcpy_s(m.numeSofer, strlen(numeSoferNou) + 1, numeSoferNou);
+
+	 m.serie = serieNou;
+
+	 return m;
+ }
 
 Masina citireMasinaDinFisier(FILE* file) {
 	char buffer[100];
@@ -90,9 +105,6 @@ void adaugaMasinaInLista(Nod** lista, Masina masinaNoua) {
 
 }
 
-
-
-
 void adaugaLaInceputInLista(Nod** lista, Masina masinaNoua) {
 	Nod* nou = (Nod*)malloc(sizeof(Nod));
 	nou->info = masinaNoua;
@@ -102,42 +114,48 @@ void adaugaLaInceputInLista(Nod** lista, Masina masinaNoua) {
 
 }
 
-//am sortat lista dupa pret
-void adaugaMasinaInListaSortataPret(Nod** lista, Masina masinaNoua) {
+//inserare sortata dupa pret
+Nod* inserareSortata(Masina m, Nod* cap) {
 	Nod* nou = (Nod*)malloc(sizeof(Nod));
-	nou->info = masinaNoua;
+	nou->info = initializare(m.id, m.nrUsi, m.pret, m.model, m.numeSofer, m.serie);
+	nou->next = NULL;
 
-	if (*lista == NULL || (*lista)->info.pret >= masinaNoua.pret) {
-		nou->next = *lista;
-		*lista = nou;
+	if (cap) {
+		if (cap->info.pret > m.pret) {
+			nou->next = cap;
+			cap = nou;
+		}
+		else {
+			Nod* p = cap;
+			while (p->next && p->next->info.pret < m.pret) {
+				p = p->next;
+			}
+			nou->next = p->next;
+			p->next = nou;
+		}
 	}
 	else {
-		Nod* curent = *lista;
-		while (curent->next != NULL && curent->next->info.pret < masinaNoua.pret) {
-			curent = curent->next;
-		}
-		nou->next = curent->next;
-		curent->next = nou;
+		cap = nou;
 	}
+	return cap;
 }
 
-
 //am modif si aici pt a lucra cu ea sortata
-Nod* citireListaMasiniDinFisierSortata(const char* numeFisier) {
+Nod* citireListaMasiniDinFisier(const char* numeFisier) {
 	FILE* file = fopen(numeFisier, "r");
+	if (!file) {
+		printf("Eroare la deschiderea fisierului!\n");
+		return NULL;
+	}
+
 	Nod* lista = NULL;
-
-
 	while (!feof(file)) {
-		adaugaMasinaInListaSortataPret(&lista, citireMasinaDinFisier(file));
-
+		Masina m = citireMasinaDinFisier(file);
+		lista = inserareSortata(m, lista); 
 	}
 	fclose(file);
 	return lista;
 }
-
-
-
 
 
 void dezalocareListaMasini(Nod** lista) {
@@ -281,7 +299,7 @@ void dezalocaVectorMasini(Masina* vector, int dimensiune) {
 
 
 int main() {
-	Nod* masini = citireListaMasiniDinFisierSortata("masini.txt");
+	Nod* masini = citireListaMasiniDinFisier("masini.txt");
 	afisareListaMasini(masini);
 
 
@@ -304,8 +322,8 @@ int main() {
 
 	// adaugare element nou dupa ce am sortat lista 
 	printf("\n-----ADAUGARE IN LISTA DUPA CE AM SORTAT-O DUPA PRET\n");
-	Masina masinaNoua = { 10, 4, 7000, "Dacia", "Popescu", 'C' };
-	adaugaMasinaInListaSortataPret(&masini, masinaNoua);
+	Masina masina1 = initializare(1, 4, 7000, "BMW", "Popescu", 'A');
+	masini = inserareSortata(masina1, masini);
 	afisareListaMasini(masini);
 
 
