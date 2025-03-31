@@ -159,7 +159,7 @@ Nod* citireListaMasiniDinFisier(const char* numeFisier) {
 
 
 void dezalocareListaMasini(Nod** lista) {
-	while (*lista);
+	while (*lista)
 	{
 		Nod* p = (*lista);
 		(*lista) = (*lista)->next;
@@ -289,6 +289,37 @@ void copiazaMasiniFiltrate(Nod* lista, const char* numeFiltrat, Masina** vectorN
 	}
 }
 
+//functia de interschimbare 
+void interschimbareElemente(Nod* lista, int poz1, int poz2) {
+	if (lista == NULL) { 
+		return;
+	}
+	Nod* p1 = lista;
+	Nod* p2 = lista;
+	int contor = 0;
+
+	while (p1 != NULL && contor < poz1) {
+		p1 = p1->next;
+		contor++;
+	}
+
+	contor = 0;
+	while (p2 != NULL && contor < poz2) {
+		p2 = p2->next;
+		contor++;
+	}
+
+	if (p1 == NULL || p2 == NULL) {
+		printf("Eroare \n");
+		return;
+	}
+
+	Masina temp = p1->info;
+	p1->info = p2->info;
+	p2->info = temp;
+}
+
+
 void dezalocaVectorMasini(Masina* vector, int dimensiune) {
 	for (int i = 0; i < dimensiune; i++) {
 		free(vector[i].model);
@@ -316,23 +347,28 @@ int main() {
 
 	//testare pt stergerea nodului de pe poz 3
 	int pozitie = 3;  
-	printf("\n-----STERGERE POZITIA 3, IN CAZUL NOSTRU ID = 6---\n");
+	printf("\n-----STERGERE POZITIA 3, IN CAZUL NOSTRU ID = 6-----\n");
 	stergeNodPePozitie(&masini, pozitie);
 	afisareListaMasini(masini);
 
 	// adaugare element nou dupa ce am sortat lista 
-	printf("\n-----ADAUGARE IN LISTA DUPA CE AM SORTAT-O DUPA PRET\n");
+	printf("\n-----ADAUGARE IN LISTA DUPA CE AM SORTAT-O DUPA PRET----\n");
 	Masina masina1 = initializare(1, 4, 7000, "BMW", "Popescu", 'A');
 	masini = inserareSortata(masina1, masini);
 	afisareListaMasini(masini);
 
 
 	//apel pentru adaugarea elementelor filtrate in vector
-	printf("\n-----VECTOR FILTRAT DUPA NUME\n");
+	printf("\n-----VECTOR FILTRAT DUPA NUME-----\n");
 	Masina* vectorFiltrat = NULL;
 	int dimensiune = 0;
 	copiazaMasiniFiltrate(masini, "Ionescu", &vectorFiltrat, &dimensiune);
 	afisareVector(vectorFiltrat, dimensiune);
+
+	// Schimbăm elementele de pe pozițiile 1 și 3 (de exemplu)
+	printf("\n-----INTERSCHIMBARE PE POZITIILE 1 SI 3-----\n");
+	interschimbareElemente(masini, 1, 3);
+	afisareListaMasini(masini);
 
 	dezalocareListaMasini(&masini);
 	dezalocaVectorMasini(vectorFiltrat, dimensiune);
