@@ -365,7 +365,7 @@ int main() {
 	copiazaMasiniFiltrate(masini, "Ionescu", &vectorFiltrat, &dimensiune);
 	afisareVector(vectorFiltrat, dimensiune);
 
-	// Schimbăm elementele de pe pozițiile 1 și 3 (de exemplu)
+	// interschimbam elementele de pe poz 1 si 3
 	printf("\n-----INTERSCHIMBARE PE POZITIILE 1 SI 3-----\n");
 	interschimbareElemente(masini, 1, 3);
 	afisareListaMasini(masini);
