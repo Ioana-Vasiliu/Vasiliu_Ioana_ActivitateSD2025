@@ -1,0 +1,6 @@
+5
+Catena 500.5 12 Strada_MihaiEminescu_15
+Sensiblu 700.0 8 Strada_Dorobanti_23
+Dona 1200.3 15 Bulevardul_Tineretului_45
+Catena 650.2 12 Strada_Universitatii_10
+HelpNet 900.8 11 Strada_Romanilor_5
