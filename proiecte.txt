@@ -1,0 +1,6 @@
+5
+1001 ProjectAlpha TechCorp 25 100000.50
+1002 ProjectBeta DevSolutions 18 75000.25
+1003 ProjectGamma InnovateX 30 120000.00
+1004 ProjectDelta CodeForge 20 85000.75
+1005 ProjectEpsilon NextGen 22 95000.00
