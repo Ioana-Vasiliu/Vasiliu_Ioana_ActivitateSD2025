@@ -1,0 +1,5 @@
+	1,Schimb Anvelope,Marius,120.50,20
+	2,Coafura,Mihaela,780.78,45
+	3,Manichiura,Ionela,450.23,70
+	4,Schimb ulei,Mihaela,896.40,90,
+	5,Vanzare ochelari,Andreea,632.20,120
