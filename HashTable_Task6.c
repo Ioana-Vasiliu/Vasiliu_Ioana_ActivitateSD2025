@@ -115,6 +115,56 @@ void stergereCladireID(HashTable* tabela, int id) {
     }
 }
 
+// 6. Deep copy in vector
+Cladire* cladiriDinAn(HashTable tabela, int an, int* nr) {
+    *nr = 0;
+    int poz = functieHash(an, tabela.dim);
+    Nod* p = tabela.vector[poz];
+    Nod* aux = p;
+    while (aux) {
+        if (aux->info.anConstructie == an)
+            (*nr)++;
+        aux = aux->next;
+    }
+    if (*nr == 0) return NULL;
+    Cladire* vector = (Cladire*)malloc(*nr * sizeof(Cladire));
+    int k = 0;
+    while (p) {
+        if (p->info.anConstructie == an) {
+            vector[k].id = p->info.id;
+            vector[k].anConstructie = an;
+            vector[k].nume = _strdup(p->info.nume);
+            vector[k].adresa = _strdup(p->info.adresa);
+            k++;
+        }
+        p = p->next;
+    }
+    return vector;
+}
+
+// 7. Modificare an construire dupa ID si vechiul an
+void modificareAnCladire(HashTable* tabela, int id, int AnulVechi, int AnulNou) {
+    int poz = functieHash(AnulVechi, tabela->dim);
+    Nod* p = tabela->vector[poz], * prev = NULL;
+    while (p) {
+        if (p->info.id == id && p->info.anConstructie == AnulVechi) {
+            Cladire modificata = p->info;
+            modificata.anConstructie = AnulNou;
+            if (prev)
+                prev->next = p->next;
+            else
+                tabela->vector[poz] = p->next;
+            free(p);
+            inserareCladire(tabela, modificata);
+            return;
+        }
+        prev = p;
+        p = p->next;
+    }
+}
+
+
+
 // Dezalocare tabela
 void dezalocareTabela(HashTable* tabela) {
     for (int i = 0; i < tabela->dim; i++) {
@@ -159,6 +209,22 @@ int main() {
 
     printf("\n--- Stergere ID 2 ---\n");
     stergereCladireID(&tabela, 2);
+    afisareTabela(tabela);
+
+    int nr = 0;
+    Cladire* vector = cladiriDinAn(tabela, 1977, &nr);
+    printf("\n--- Vectorul cu cladirile din 1977 \n", nr);
+    for (int i = 0; i < nr; i++)
+        afisareCladire(vector[i]);
+
+    for (int i = 0; i < nr; i++) {
+        free(vector[i].nume);
+        free(vector[i].adresa);
+    }
+    free(vector);
+
+    printf("\n--- Modificare an Cladire ID 4 din 1990 in 2000 ---\n");
+    modificareAnCladire(&tabela, 4, 1990, 2000);
     afisareTabela(tabela);
 
     dezalocareTabela(&tabela);
