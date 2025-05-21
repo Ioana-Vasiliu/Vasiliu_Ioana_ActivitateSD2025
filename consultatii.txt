@@ -1,0 +1,6 @@
+5
+20231027 PopescuIon Cardiologie 150
+20231103 IonescuMaria Cardiologie 200
+20231115 GeorgescuAna Chirurgie 300
+20231201 DumitruAndrei Pediatrie 100
+20231210 RusuElena Chirurgie 250
