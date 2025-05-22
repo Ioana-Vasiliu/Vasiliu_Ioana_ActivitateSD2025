@@ -1,0 +1,6 @@
+1,Iphone,450,DefectAudio,5
+2,Samsung,890.70,TelefonSpart,8
+3,HP,7800,DefectWindows,1
+4,Asus,786.23,MouseStricat,10
+5,LogiTech,120.56,ClickStricat,7
+6,LogiTech,179.56,Defect,4
