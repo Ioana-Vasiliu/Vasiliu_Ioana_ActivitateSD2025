@@ -1,0 +1,6 @@
+3,Hilton,3,450
+1,Inter,5,230
+6,Continental,7,670
+7,Steaua Nordului,2,900
+2,Ramada,2,780
+5,Oltenita,5,678
