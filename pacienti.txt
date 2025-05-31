@@ -1,0 +1,5 @@
+1,Popescu Ion,Fractura,65,9
+2,Ionescu Maria,Raceala,32,2
+3,Georgescu Andrei,Infarct,70,10
+4,Stan Elena,Hemoragie,45,7
+5,Marin Radu,Gastrita,25,1
